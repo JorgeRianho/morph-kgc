@@ -21,6 +21,8 @@ from .mapping.mapping_parser import retrieve_mappings
 from .materializer import _materialize_mapping_group_to_set
 from .args_parser import load_config_from_argument
 from .constants import RML_TRIPLES_MAP_CLASS, LOGGING_NAMESPACE
+from .args_parser import load_config_from_argument
+from .mapping.mapping_parser import MappingParser
 
 
 LOGGER = logging.getLogger(LOGGING_NAMESPACE)
@@ -112,3 +114,24 @@ def materialize_kafka(config, python_source=None):
         # close the Kafka producer
         if kafka_producer:
             kafka_producer.close()
+
+def normalize(config_path="config.ini"):
+    """
+    Normalize the mapping defined in the configuration file.
+    Generates the “normalized_mapping.ttl” file from the original mapping.    
+    """
+
+
+    #Load configuration
+    config = load_config_from_argument(config_path)
+
+    #Creates the mapping parser
+    parser = MappingParser(config)
+
+    #Executes parsing y normalization process
+    parser.parse_mappings()
+
+    #Saves the file as 'normalized_mapping.ttl'
+    LOGGER.info("✅ Mapping normalization completed successfully.")
+    LOGGER.info("File saved as: normalized_mapping.ttl")
+

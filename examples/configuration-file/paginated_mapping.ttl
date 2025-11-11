@@ -1,0 +1,353 @@
+@prefix rml: <http://w3id.org/rml/> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+
+<#AssistantProfessor> rml:logicalSource [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr
+        FROM professor INNER JOIN faculty ON professor.nr=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr WHERE professor.professorType='assistantProfessor' """ ] .
+
+<#AssociateProfessor> rml:logicalSource [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr
+        FROM professor INNER JOIN faculty ON professor.nr=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr WHERE professor.professorType='associateProfessor' """ ] .
+
+<#CoAuthorOfPublication> rml:logicalSource [ rml:query """
+        SELECT publication.name AS publicationname, graduateStudent.name AS graduatestudentname, faculty.name AS facultyname, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM coAuthorOfPublication INNER JOIN publication ON coAuthorOfPublication.publicationID=publication.nr INNER JOIN faculty ON publication.mainAuthor=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr INNER JOIN graduateStudent ON coAuthorOfPublication.graduateStudentID=graduateStudent.nr """ ] .
+
+<#Department> rml:logicalSource [ rml:query """
+        SELECT nr AS departmentnr, subOrganizationOf AS universitynr, name
+        FROM department """ ],
+        [ rml:query """
+        SELECT nr AS departmentnr, subOrganizationOf AS universitynr, name
+        FROM department """ ],
+        [ rml:query """
+        SELECT nr AS departmentnr, subOrganizationOf AS universitynr, name
+        FROM department """ ] .
+
+<#Faculty> rml:logicalSource [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom, masterDegreeFrom AS masterdegreefrom, doctoralDegreeFrom AS doctoraldegreefrom
+        FROM faculty INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom, masterDegreeFrom AS masterdegreefrom, doctoralDegreeFrom AS doctoraldegreefrom
+        FROM faculty INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom, masterDegreeFrom AS masterdegreefrom, doctoralDegreeFrom AS doctoraldegreefrom
+        FROM faculty INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom, masterDegreeFrom AS masterdegreefrom, doctoralDegreeFrom AS doctoraldegreefrom
+        FROM faculty INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom, masterDegreeFrom AS masterdegreefrom, doctoralDegreeFrom AS doctoraldegreefrom
+        FROM faculty INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom, masterDegreeFrom AS masterdegreefrom, doctoralDegreeFrom AS doctoraldegreefrom
+        FROM faculty INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom, masterDegreeFrom AS masterdegreefrom, doctoralDegreeFrom AS doctoraldegreefrom
+        FROM faculty INNER JOIN department ON faculty.worksFor=department.nr """ ] .
+
+<#FacultyTeacherGraduateCourse> rml:logicalSource [ rml:query """
+        SELECT faculty.name AS facultyname, department.nr AS departmentnr, department.subOrganizationOf AS universitynr, graduateCourse.name AS graduatecoursename
+        FROM faculty INNER JOIN department ON faculty.worksFor=department.nr INNER JOIN graduateCourse ON graduateCourse.teacher=faculty.nr """ ] .
+
+<#FacultyTeacherUndergraduateCourse> rml:logicalSource [ rml:query """
+        SELECT faculty.name AS facultyname, department.nr AS departmentnr, department.subOrganizationOf AS universitynr, undergraduateCourse.name AS undergraduatecoursename
+        FROM faculty INNER JOIN department ON worksFor=department.nr INNER JOIN undergraduateCourse ON undergraduateCourse.teacher=faculty.nr """ ] .
+
+<#FullProfessor> rml:logicalSource [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr
+        FROM professor INNER JOIN faculty ON professor.nr=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr WHERE professor.professorType='fullProfessor' """ ] .
+
+<#GraduateCourse> rml:logicalSource [ rml:query """
+        SELECT subOrganizationOf AS universitynr, graduateCourse.name AS graduatecoursename, department.nr AS departmentnr
+        FROM graduateCourse INNER JOIN faculty ON graduateCourse.teacher=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT subOrganizationOf AS universitynr, graduateCourse.name AS graduatecoursename, department.nr AS departmentnr
+        FROM graduateCourse INNER JOIN faculty ON graduateCourse.teacher=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr """ ] .
+
+<#GraduateStudent> rml:logicalSource [ rml:query """
+        SELECT department.subOrganizationOf AS universitynr, graduateStudent.name AS graduatestudentname, department.nr AS departmentnr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom
+        FROM graduateStudent INNER JOIN department ON graduateStudent.memberOf=department.nr """ ],
+        [ rml:query """
+        SELECT department.subOrganizationOf AS universitynr, graduateStudent.name AS graduatestudentname, department.nr AS departmentnr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom
+        FROM graduateStudent INNER JOIN department ON graduateStudent.memberOf=department.nr """ ],
+        [ rml:query """
+        SELECT department.subOrganizationOf AS universitynr, graduateStudent.name AS graduatestudentname, department.nr AS departmentnr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom
+        FROM graduateStudent INNER JOIN department ON graduateStudent.memberOf=department.nr """ ],
+        [ rml:query """
+        SELECT department.subOrganizationOf AS universitynr, graduateStudent.name AS graduatestudentname, department.nr AS departmentnr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom
+        FROM graduateStudent INNER JOIN department ON graduateStudent.memberOf=department.nr """ ],
+        [ rml:query """
+        SELECT department.subOrganizationOf AS universitynr, graduateStudent.name AS graduatestudentname, department.nr AS departmentnr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom
+        FROM graduateStudent INNER JOIN department ON graduateStudent.memberOf=department.nr """ ],
+        [ rml:query """
+        SELECT department.subOrganizationOf AS universitynr, graduateStudent.name AS graduatestudentname, department.nr AS departmentnr, telephone, emailAddress AS emailaddress, undergraduateDegreeFrom AS undergraduatedegreefrom
+        FROM graduateStudent INNER JOIN department ON graduateStudent.memberOf=department.nr """ ] .
+
+<#GraduateStudentAdvisor> rml:logicalSource [ rml:query """
+        SELECT department.nr AS departmentnr, department.subOrganizationOf AS universitynr, graduateStudent.name AS graduatestudentname, faculty.name AS facultyname
+        FROM graduateStudent INNER JOIN department ON graduateStudent.memberOf=department.nr INNER JOIN faculty ON graduateStudent.advisor=faculty.nr """ ] .
+
+<#GraduateStudentTakeCourse> rml:logicalSource [ rml:query """
+        SELECT graduateStudent.name AS graduatestudentname, graduateCourse.name AS graduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM graduateStudentTakeCourse INNER JOIN graduateStudent ON graduateStudentTakeCourse.graduateStudentID=graduateStudent.nr INNER JOIN department ON graduateStudent.memberOf=department.nr INNER JOIN graduateCourse ON graduateStudentTakeCourse.graduateCourseID=graduateCourse.nr """ ] .
+
+<#GraduateStudentTeachingAssistant> rml:logicalSource [ rml:query """
+        SELECT undergraduateCourse.name AS undergraduatecoursename, graduateStudent.name AS graduatestudentname, department.nr AS departmentnr, department.subOrganizationOf as universitynr
+        FROM undergraduateCourse INNER JOIN graduateStudent ON undergraduateCourse.teachingAssistant=graduateStudent.nr INNER JOIN department ON graduateStudent.memberOf=department.nr """ ],
+        [ rml:query """
+        SELECT undergraduateCourse.name AS undergraduatecoursename, graduateStudent.name AS graduatestudentname, department.nr AS departmentnr, department.subOrganizationOf as universitynr
+        FROM undergraduateCourse INNER JOIN graduateStudent ON undergraduateCourse.teachingAssistant=graduateStudent.nr INNER JOIN department ON graduateStudent.memberOf=department.nr """ ] .
+
+<#Lecturer> rml:logicalSource [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr
+        FROM lecturer INNER JOIN faculty ON lecturer.nr=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr """ ] .
+
+<#Professor> rml:logicalSource [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, researchInterest AS researchinterest, headOf AS headof
+        FROM professor INNER JOIN faculty ON professor.nr=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT department.nr AS departmentnr, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, researchInterest AS researchinterest, headOf AS headof
+        FROM professor INNER JOIN faculty ON professor.nr=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr """ ] .
+
+<#Publication> rml:logicalSource [ rml:query """
+        SELECT publication.name AS publicationname, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, department.nr AS departmentnr, publication.title AS publicationtitle, publication.abstract AS publicationabstract
+        FROM publication INNER JOIN faculty ON publication.mainauthor=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT publication.name AS publicationname, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, department.nr AS departmentnr, publication.title AS publicationtitle, publication.abstract AS publicationabstract
+        FROM publication INNER JOIN faculty ON publication.mainauthor=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT publication.name AS publicationname, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, department.nr AS departmentnr, publication.title AS publicationtitle, publication.abstract AS publicationabstract
+        FROM publication INNER JOIN faculty ON publication.mainauthor=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT publication.name AS publicationname, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, department.nr AS departmentnr, publication.title AS publicationtitle, publication.abstract AS publicationabstract
+        FROM publication INNER JOIN faculty ON publication.mainauthor=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT publication.name AS publicationname, faculty.name AS facultyname, department.subOrganizationOf AS universitynr, department.nr AS departmentnr, publication.title AS publicationtitle, publication.abstract AS publicationabstract
+        FROM publication INNER JOIN faculty ON publication.mainauthor=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr """ ] .
+
+<#ResearchGroup> rml:logicalSource [ rml:query """
+        SELECT researchGroup.nr AS researchgroupnr, researchGroup.subOrganizationOf AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM researchGroup INNER JOIN department ON researchGroup.subOrganizationOf=department.nr """ ],
+        [ rml:query """
+        SELECT researchGroup.nr AS researchgroupnr, researchGroup.subOrganizationOf AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM researchGroup INNER JOIN department ON researchGroup.subOrganizationOf=department.nr """ ] .
+
+<#UndergraduateCourse> rml:logicalSource [ rml:query """
+        SELECT subOrganizationOf AS universitynr, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr
+        FROM undergraduateCourse INNER JOIN faculty ON undergraduateCourse.teacher=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr """ ],
+        [ rml:query """
+        SELECT subOrganizationOf AS universitynr, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr
+        FROM undergraduateCourse INNER JOIN faculty ON undergraduateCourse.teacher=faculty.nr INNER JOIN department ON faculty.worksFor=department.nr """ ] .
+
+<#UndergraduateStudent> rml:logicalSource [ rml:query """
+        SELECT department.subOrganizationOf AS universitynr, undergraduateStudent.name AS undergraduatestudentname, department.nr AS departmentnr, telephone, emailAddress AS emailaddress
+        FROM undergraduateStudent INNER JOIN department ON undergraduateStudent.memberOf=department.nr """ ],
+        [ rml:query """
+        SELECT department.subOrganizationOf AS universitynr, undergraduateStudent.name AS undergraduatestudentname, department.nr AS departmentnr, telephone, emailAddress AS emailaddress
+        FROM undergraduateStudent INNER JOIN department ON undergraduateStudent.memberOf=department.nr """ ],
+        [ rml:query """
+        SELECT department.subOrganizationOf AS universitynr, undergraduateStudent.name AS undergraduatestudentname, department.nr AS departmentnr, telephone, emailAddress AS emailaddress
+        FROM undergraduateStudent INNER JOIN department ON undergraduateStudent.memberOf=department.nr """ ],
+        [ rml:query """
+        SELECT department.subOrganizationOf AS universitynr, undergraduateStudent.name AS undergraduatestudentname, department.nr AS departmentnr, telephone, emailAddress AS emailaddress
+        FROM undergraduateStudent INNER JOIN department ON undergraduateStudent.memberOf=department.nr """ ],
+        [ rml:query """
+        SELECT department.subOrganizationOf AS universitynr, undergraduateStudent.name AS undergraduatestudentname, department.nr AS departmentnr, telephone, emailAddress AS emailaddress
+        FROM undergraduateStudent INNER JOIN department ON undergraduateStudent.memberOf=department.nr """ ] .
+
+<#UndergraduateStudentAdvisor> rml:logicalSource [ rml:query """
+        SELECT department.nr AS departmentnr, department.subOrganizationOf AS universitynr, undergraduateStudent.name AS undergraduatestudentname, faculty.name AS facultyname
+        FROM undergraduateStudent INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN faculty ON undergraduateStudent.advisor=faculty.nr """ ] .
+
+<#UndergraduateStudentTakeCourse_page1> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 0""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_1" ] .
+
+<#UndergraduateStudentTakeCourse_page10> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 6660""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_10" ] .
+
+<#UndergraduateStudentTakeCourse_page11> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 7400""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_11" ] .
+
+<#UndergraduateStudentTakeCourse_page12> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 8140""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_12" ] .
+
+<#UndergraduateStudentTakeCourse_page13> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 8880""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_13" ] .
+
+<#UndergraduateStudentTakeCourse_page14> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 9620""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_14" ] .
+
+<#UndergraduateStudentTakeCourse_page15> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 10360""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_15" ] .
+
+<#UndergraduateStudentTakeCourse_page16> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 11100""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_16" ] .
+
+<#UndergraduateStudentTakeCourse_page17> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 11840""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_17" ] .
+
+<#UndergraduateStudentTakeCourse_page18> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 12580""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_18" ] .
+
+<#UndergraduateStudentTakeCourse_page19> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 13320""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_19" ] .
+
+<#UndergraduateStudentTakeCourse_page2> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 740""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_2" ] .
+
+<#UndergraduateStudentTakeCourse_page20> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 14060""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_20" ] .
+
+<#UndergraduateStudentTakeCourse_page21> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 14800""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_21" ] .
+
+<#UndergraduateStudentTakeCourse_page22> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 15540""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_22" ] .
+
+<#UndergraduateStudentTakeCourse_page23> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 16280""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_23" ] .
+
+<#UndergraduateStudentTakeCourse_page24> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 17020""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_24" ] .
+
+<#UndergraduateStudentTakeCourse_page3> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 1480""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_3" ] .
+
+<#UndergraduateStudentTakeCourse_page4> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 2220""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_4" ] .
+
+<#UndergraduateStudentTakeCourse_page5> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 2960""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_5" ] .
+
+<#UndergraduateStudentTakeCourse_page6> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 3700""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_6" ] .
+
+<#UndergraduateStudentTakeCourse_page7> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 4440""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_7" ] .
+
+<#UndergraduateStudentTakeCourse_page8> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 5180""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_8" ] .
+
+<#UndergraduateStudentTakeCourse_page9> rml:logicalSource [ rml:query """
+        SELECT undergraduateStudent.name AS undergraduatestudentname, undergraduateCourse.name AS undergraduatecoursename, department.nr AS departmentnr, department.subOrganizationOf AS universitynr
+        FROM undergraduateStudentTakeCourse INNER JOIN undergraduateStudent ON undergraduateStudentTakeCourse.undergraduateStudentID=undergraduateStudent.nr INNER JOIN department ON undergraduateStudent.memberOf=department.nr INNER JOIN undergraduateCourse ON undergraduateStudentTakeCourse.undergraduateCourseID=undergraduateCourse.nr  LIMIT 740 OFFSET 5920""" ;
+            rml:referenceFormulation rml:SQL2008 ] ;
+    rml:predicateObjectMap [ rml:objectMap [ ] ;
+            rml:predicate <nad3418a092264799ba4a2e8467fdb9cdb226> ] ;
+    rr:subjectMap [ rr:template "UndergraduateStudentTakeCourse_9" ] .
+
