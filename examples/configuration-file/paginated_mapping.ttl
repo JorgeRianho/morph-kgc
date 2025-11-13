@@ -730,3 +730,19 @@
     rml:subjectMap [ rml:template "http://www.department{departmentnr}.university{universitynr}.edu/{undergraduatestudentname}" ;
             rml:termType rml:IRI ] .
 
+<file:///home/jorge/proyectos/git/lubm4obda/mappings/rml/lubm4obda.rml.ttl#University> rml:logicalSource [ rml:tableName "university" ] ;
+    rml:predicateObjectMap [ rml:graphMap [ rml:constant rml:defaultGraph ;
+                    rml:termType rml:IRI ] ;
+            rml:objectMap [ rml:constant ub:University ;
+                    rml:termType rml:IRI ] ;
+            rml:predicateMap [ rml:constant rdf:type ;
+                    rml:termType rml:IRI ] ],
+        [ rml:graphMap [ rml:constant rml:defaultGraph ;
+                    rml:termType rml:IRI ] ;
+            rml:objectMap [ rml:reference "name" ;
+                    rml:termType rml:Literal ] ;
+            rml:predicateMap [ rml:constant ub:name ;
+                    rml:termType rml:IRI ] ] ;
+    rml:subjectMap [ rml:template "http://www.university{nr}.edu" ;
+            rml:termType rml:IRI ] .
+
