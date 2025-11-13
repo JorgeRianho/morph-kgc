@@ -16,7 +16,6 @@ RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 # Funciones auxiliares
 # ==========================
 def row_counter(db_url: str, query: str) -> int:
-    """Devuelve el número de filas de una consulta SQL."""
     db_url = db_url.replace("postgresql+psycopg://", "postgresql://")
     try:
         conn_local = psycopg.connect(db_url)
@@ -30,20 +29,15 @@ def row_counter(db_url: str, query: str) -> int:
         return 0
 
 def cores_number_obtainer() -> int:
-    """Devuelve el número de núcleos disponibles."""
-    cpu_number = multiprocessing.cpu_count()
-    return cpu_number
+    return multiprocessing.cpu_count()
 
 def pagination_creator(total_rows: int, cpu_number: int) -> int:
-    """Calcula el límite por página según filas y núcleos."""
-    limit = math.ceil(total_rows / cpu_number)
-    return limit
+    return math.ceil(total_rows / cpu_number)
 
 # ==========================
 # Copiar subgrafo clonando BNodes
 # ==========================
 def copy_recursive_with_new_bnodes(graph_in, graph_out, subject, bnode_map):
-    """Copia un subgrafo, clonando los blank nodes."""
     if isinstance(subject, BNode):
         if subject in bnode_map:
             return bnode_map[subject]
@@ -53,28 +47,33 @@ def copy_recursive_with_new_bnodes(graph_in, graph_out, subject, bnode_map):
         new_subject = subject
 
     for s, p, o in graph_in.triples((subject, None, None)):
-        # Clonar sujeto si es BNode
         new_s = bnode_map[s] if isinstance(s, BNode) and s in bnode_map else s
-
-        # Clonar objeto si es BNode recursivamente
         if isinstance(o, BNode):
             new_o = copy_recursive_with_new_bnodes(graph_in, graph_out, o, bnode_map)
         else:
             new_o = o
-
         graph_out.add((new_s, p, new_o))
 
     return new_subject
+
+def generate_query_from_table_name(table_name: str) -> str:
+    table_str = table_name.strip()
+    if '.' in table_str:
+        parts = table_str.split('.')
+        parts_escaped = [f'"{p.strip().replace("\"","\"\"")}"' for p in parts]
+        table_escaped = '.'.join(parts_escaped)
+    else:
+        table_escaped = f'"{table_str.replace("\"","\"\"")}"'
+    return f'SELECT * FROM {table_escaped}'
 
 # ==========================
 # Función principal
 # ==========================
 def copy_mapping_with_query(input_path: str, output_path: str):
-    # Cargar grafo
     g = Graph()
     g.parse(input_path, format='turtle')
 
-    # Configuración de DB
+    # Configuración DB
     config = configparser.ConfigParser()
     config.read("default_config.ini")
     conn = config.get("DataSource1", "db_url")
@@ -84,78 +83,74 @@ def copy_mapping_with_query(input_path: str, output_path: str):
     for prefix, ns in g.namespaces():
         mapping_graph.bind(prefix, ns)
 
-    # SPARQL para extraer TMs
-    q_query = """
-        PREFIX rml: <http://w3id.org/rml/>
-        PREFIX rr: <http://www.w3.org/ns/r2rml#>
-        PREFIX ub: <http://swat.cse.lehigh.edu/onto/univ-bench.owl#>
-
-        SELECT DISTINCT ?tm ?query ?sm ?pom WHERE {
-            ?tm rml:logicalSource ?ls .
-            ?ls rml:query ?query .
-            ?tm rml:subjectMap ?sm .
-            OPTIONAL { ?tm rml:predicateObjectMap ?pom . }
-        }
-    """
-    results = g.query(q_query)
-
     uris_to_copy = set()
     paginated_tms = set()
 
-    for row in results:
-        tm, query, sm, pom = row
-        if query and isinstance(query, Literal):
-            sql_query = str(query)
-            total_rows = row_counter(conn, sql_query)
+    # ==========================
+    # Procesar todos los TriplesMaps
+    # ==========================
+    for tm in g.subjects(RML.logicalSource, None):
+        logical_source = next(g.objects(tm, RML.logicalSource), None)
+        sm = next(g.objects(tm, RML.subjectMap), None)
+        pom = next(g.objects(tm, RML.predicateObjectMap), None)
 
-            if total_rows > 10000:
-                cpu_number = cores_number_obtainer()
-                limit = pagination_creator(total_rows, cpu_number)
-                logical_source_original = next(g.objects(tm, RML.logicalSource), None)
-                if not logical_source_original:
-                    continue
+        # Obtener query
+        query_obj = next(g.objects(logical_source, RML.query), None)
+        table_obj = next(g.objects(logical_source, RML.tableName), None)
 
-                paginated_tms.add(tm)
-
-                for i in range(cpu_number):
-                    offset = i * limit
-                    # Última página sin limit si excede
-                    if offset + limit >= total_rows:
-                        paginated_query = f"{sql_query} OFFSET {offset}"
-                    else:
-                        paginated_query = f"{sql_query} LIMIT {limit} OFFSET {offset}"
-
-                    new_tm_uri = URIRef(str(tm) + f"_Page{i+1}")
-                    new_ls = BNode()
-
-                    # Copiar propiedades del logicalSource excepto query
-                    for p, o in g.predicate_objects(logical_source_original):
-                        if p != RML.query:
-                            mapping_graph.add((new_ls, p, o))
-
-                    mapping_graph.add((new_ls, RML.query, Literal(paginated_query)))
-                    mapping_graph.add((new_tm_uri, RML.logicalSource, new_ls))
-
-                    # **Crear un mapa de BNodes por página**
-                    bnode_map_page = {}
-
-                    if sm:
-                        new_sm = copy_recursive_with_new_bnodes(g, mapping_graph, sm, bnode_map_page)
-                        mapping_graph.add((new_tm_uri, RML.subjectMap, new_sm))
-                    if pom:
-                        new_pom = copy_recursive_with_new_bnodes(g, mapping_graph, pom, bnode_map_page)
-                        mapping_graph.add((new_tm_uri, RML.predicateObjectMap, new_pom))
-
-            else:
-                uris_to_copy.add(tm)
-                if sm: uris_to_copy.add(sm)
-                if pom: uris_to_copy.add(pom)
+        if query_obj:
+            sql_query = str(query_obj)
+        elif table_obj:
+            sql_query = generate_query_from_table_name(str(table_obj))
         else:
+            # Ningún query ni tableName → ignorar
+            uris_to_copy.add(tm)
+            if sm: uris_to_copy.add(sm)
+            if pom: uris_to_copy.add(pom)
+            continue
+
+        # Contar filas
+        total_rows = row_counter(conn, sql_query)
+
+        if total_rows > 10000:
+            cpu_number = cores_number_obtainer()
+            limit = pagination_creator(total_rows, cpu_number)
+            paginated_tms.add(tm)
+
+            for i in range(cpu_number):
+                offset = i * limit
+                if offset + limit >= total_rows:
+                    paginated_query = f"{sql_query} OFFSET {offset}"
+                else:
+                    paginated_query = f"{sql_query} LIMIT {limit} OFFSET {offset}"
+
+                new_tm_uri = URIRef(str(tm) + f"_Page{i+1}")
+                new_ls = BNode()
+
+                for p, o in g.predicate_objects(logical_source):
+                    if p != RML.query:
+                        mapping_graph.add((new_ls, p, o))
+
+                mapping_graph.add((new_ls, RML.query, Literal(paginated_query)))
+                mapping_graph.add((new_tm_uri, RML.logicalSource, new_ls))
+
+                bnode_map_page = {}
+                if sm:
+                    new_sm = copy_recursive_with_new_bnodes(g, mapping_graph, sm, bnode_map_page)
+                    mapping_graph.add((new_tm_uri, RML.subjectMap, new_sm))
+                if pom:
+                    new_pom = copy_recursive_with_new_bnodes(g, mapping_graph, pom, bnode_map_page)
+                    mapping_graph.add((new_tm_uri, RML.predicateObjectMap, new_pom))
+
+        else:
+            # No paginar, copiar TM original
             uris_to_copy.add(tm)
             if sm: uris_to_copy.add(sm)
             if pom: uris_to_copy.add(pom)
 
-    # Copiar TMs no paginados usando un mapa global de BNodes
+    # ==========================
+    # Copiar TM no paginados
+    # ==========================
     bnode_map_global = {}
     for uri in uris_to_copy:
         if uri not in paginated_tms:
@@ -163,7 +158,7 @@ def copy_mapping_with_query(input_path: str, output_path: str):
 
     # Serializar
     mapping_graph.serialize(destination=output_path, format='turtle')
-    print(f"Mapping generated in: {output_path}")
+    print(f"Mapping generado en: {output_path}")
 
 # ==========================
 # Ejemplo de uso
