@@ -116,11 +116,6 @@ def materialize_kafka(config, python_source=None):
             kafka_producer.close()
 
 def normalize(config_path="config.ini"):
-    """
-    Normalize the mapping defined in the configuration file.
-    Generates the “normalized_mapping.ttl” file from the original mapping.    
-    """
-
 
     #Load configuration
     config = load_config_from_argument(config_path)
@@ -130,8 +125,4 @@ def normalize(config_path="config.ini"):
 
     #Executes parsing y normalization process
     parser.parse_mappings()
-
-    #Saves the file as 'normalized_mapping.ttl'
-    LOGGER.info("✅ Mapping normalization completed successfully.")
-    LOGGER.info("File saved as: normalized_mapping.ttl")
 
