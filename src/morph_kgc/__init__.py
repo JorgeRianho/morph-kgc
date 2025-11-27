@@ -15,6 +15,7 @@ from rdflib import Graph
 from pyoxigraph import Store
 from io import BytesIO
 from itertools import repeat
+import configparser
 
 from .args_parser import load_config_from_command_line
 from .mapping.mapping_parser import retrieve_mappings
@@ -23,7 +24,7 @@ from .args_parser import load_config_from_argument
 from .constants import RML_TRIPLES_MAP_CLASS, LOGGING_NAMESPACE
 from .args_parser import load_config_from_argument
 from .mapping.mapping_parser import MappingParser
-from mapping.mapping_pagination import pagination
+from .mapping.mapping_pagination import pagination
 
 
 LOGGER = logging.getLogger(LOGGING_NAMESPACE)
@@ -116,21 +117,19 @@ def materialize_kafka(config, python_source=None):
         if kafka_producer:
             kafka_producer.close()
 
-def normalize(config_path="config.ini"):
+def normalize(config, python_source = None):
 
     #Load configuration
-    config = load_config_from_argument(config_path)
+    loaded = load_config_from_argument(config, python_source)
 
     #Creates the mapping parser
-    parser = MappingParser(config)
+    parser = MappingParser(loaded)
 
     #Executes parsing and normalization process
-    parser.parse_mappings()
+    parser._normalize_mapping_graph()
 
-def paginate(config_path="config.ini"):
+def paginate(config, python_source = None):
 
-    config = load_config_from_argument(config_path)
-
-    normalized = normalize(config)
+    normalized = normalize(config, python_source)
 
     normalized.pagination()
