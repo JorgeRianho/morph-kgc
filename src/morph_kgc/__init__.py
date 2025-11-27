@@ -23,6 +23,7 @@ from .args_parser import load_config_from_argument
 from .constants import RML_TRIPLES_MAP_CLASS, LOGGING_NAMESPACE
 from .args_parser import load_config_from_argument
 from .mapping.mapping_parser import MappingParser
+from mapping.mapping_pagination import pagination
 
 
 LOGGER = logging.getLogger(LOGGING_NAMESPACE)
@@ -126,3 +127,10 @@ def normalize(config_path="config.ini"):
     #Executes parsing and normalization process
     parser.parse_mappings()
 
+def paginate(config_path="config.ini"):
+
+    config = load_config_from_argument(config_path)
+
+    normalized = normalize(config)
+
+    normalized.pagination()
