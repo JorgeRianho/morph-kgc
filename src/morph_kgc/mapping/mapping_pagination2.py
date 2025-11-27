@@ -164,4 +164,4 @@ def copy_mapping_with_query(input_path: str, output_path: str):
 # Ejemplo de uso
 # ==========================
 if __name__ == "__main__":
-    copy_mapping_with_query("normalized_mapping.ttl", "output_mapping_paginated.ttl")
+    copy_mapping_with_query("normalized_mapping.ttl", "paginated_mapping.ttl")
