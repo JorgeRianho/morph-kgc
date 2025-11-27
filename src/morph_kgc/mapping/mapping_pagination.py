@@ -3,6 +3,7 @@ import multiprocessing
 import math
 import psycopg
 import configparser
+import os
 
 # ==========================
 # Namespaces
@@ -60,7 +61,7 @@ def generate_query_from_table_name(table_name: str) -> str:
         table_escaped = f'"{table_str.replace("\"","\"\"")}"'
     return f'SELECT * FROM {table_escaped}'
 
-def pagination(input_path: str, output_path: str, config_path: str = "default_config.ini"):
+def pagination(config_path: str = "default_config.ini", input_path: str = None, output_path: str = None):
     
     g = Graph()
     g.parse(input_path, format='turtle')
@@ -140,4 +141,6 @@ def pagination(input_path: str, output_path: str, config_path: str = "default_co
             copy_recursive_with_new_bnodes(g, mapping_graph, uri, bnode_map_global)
     mapping_graph.serialize(destination=output_path, format='turtle')
     print(f"Mapping generated in: {output_path}")
+
+    return mapping_graph
 
