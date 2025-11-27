@@ -44,7 +44,7 @@ dependencies = [
   'rdflib>=6.1.1, <7.3.0',
   'pyoxigraph>=0.3.0, <0.4.0',
   'ruamel.yaml>=0.18.0, <0.19.0',
-  'jsonpath-python>=1.0.6, <2.0.0',
+  'jsonpath-python==1.0.6',# <2.0.0',
   'elementpath>=4.0.0, <5.0.0',
   'duckdb>=1.0.0, <2.0.0',
   'falcon>=3.0.0, <5.0.0'
@@ -68,6 +68,8 @@ kuzu = ['kuzu>=0.4.2, <2.0.0']
 neo4j = ['neo4j>=5.20.0, <6.0.0']
 snowflake =['snowflake-sqlalchemy>=1.7.3, <2.0.0']
 databricks =['databricks-sqlalchemy>=2.0.4, <3.0.0']
+http =['requests>=2.0.0, <3.0.0']
+jelly = ["pyjelly>=0.6.2"]
 all = [
   'morph_kgc[kafka]',
   'morph_kgc[mysql]',
@@ -81,4 +83,5 @@ all = [
   'morph_kgc[neo4j]',
   'morph_kgc[snowflake]',
   'morph_kgc[databricks]',
+  'morph_kgc[http]',
 ]
