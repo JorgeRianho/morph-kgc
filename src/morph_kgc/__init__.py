@@ -123,6 +123,6 @@ def normalize(config_path="config.ini"):
     #Creates the mapping parser
     parser = MappingParser(config)
 
-    #Executes parsing y normalization process
+    #Executes parsing and normalization process
     parser.parse_mappings()
 
